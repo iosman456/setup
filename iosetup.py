@@ -1,58 +1,23 @@
-import os
 import subprocess
 import sys
 
-def is_root():
-    return os.geteuid() == 0
+def install_packages():
+    with open('requests.txt', 'r') as file:
+        packages = file.readlines()
 
-def check_package_installed(package_name):
-    try:
-        result = subprocess.run(["apk", "info", package_name], check=True, capture_output=True, text=True)
-        if package_name in result.stdout:
-            return True
-        return False
-    except subprocess.CalledProcessError:
-        return False
-
-def install_package(package_name):
-    if check_package_installed(package_name):
-        print(f"{package_name} zaten yüklü.")
-        return
-    try:
-        result = subprocess.run(["apk", "add", package_name], check=True, capture_output=True, text=True)
-        print(f"{package_name} başarıyla yüklendi!\n{result.stdout}")
-    except subprocess.CalledProcessError as e:
-        print(f"{package_name} yüklenirken hata oluştu:\n{e.stderr}")
-
-def main():
-    if not is_root():
-        print("Bu scripti çalıştırmak için root yetkisine sahip olmalısınız.")
-        sys.exit(1)
-
-    print("Hoş geldiniz! Bu script, İOS'da gereken paketleri yükleyecek.\n")
-
-    default_packages = [
-        "update", "upgrade", "python2", "python3", "py-pip", "py3-pip", 
-        "git", "curl", "wget", "vim", "nano", "htop", "tmux", "openssl", 
-        "nodejs", "npm", "zip", "unzip", "jq", "bash", "make", 
-        "gcc", "g++", "nodejs-npm", "python3-dev", "libffi-dev", "musl-dev",
-        "docker", "docker-compose", "postgresql", "redis", "mongodb",
-        "sqlite", "nginx", "apache2", "php", "php-fpm", "ruby", "perl",
-        "java", "openjdk8", "openjdk11", "maven", "gradle", "pipenv",
-        "virtualenv", "ruby-dev", "perl-dev", "go", "rust"
-    ]
-
-    user_input = input("Varsayılan paketleri yüklemek ister misiniz? (E/h): ").strip().lower()
-    if user_input == 'e':
-        packages = default_packages
-    else:
-        packages = input("Yüklemek istediğiniz paketleri virgülle ayırarak girin: ").strip().split(',')
-
-    print("\nGereken paketler yükleniyor...")
     for package in packages:
-        package = package.strip()
-        install_package(package)
-    print("Gereken paketler yüklendi!")
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', package.strip()])
+
+def save_installed_packages():
+    installed_packages = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
+    with open('requests.txt', 'w') as file:
+        file.write(installed_packages.decode())
+
+def show_license():
+    with open('requests.txt', 'r') as file:
+        print(file.read())
 
 if __name__ == "__main__":
-    main()
+    install_packages()
+    save_installed_packages()
+    show_license()
