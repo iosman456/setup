@@ -29,8 +29,9 @@ def main():
         print("Bu scripti çalıştırmak için root yetkisine sahip olmalısınız.")
         sys.exit(1)
 
-    print("İOS'da Gereken Paketler Yükleniyor...")
-    packages = [
+    print("Hoş geldiniz! Bu script, İOS'da gereken paketleri yükleyecek.\n")
+
+    default_packages = [
         "update", "upgrade", "python2", "python3", "py-pip", "py3-pip", 
         "git", "curl", "wget", "vim", "nano", "htop", "tmux", "openssl", 
         "nodejs", "npm", "zip", "unzip", "jq", "bash", "make", 
@@ -40,9 +41,18 @@ def main():
         "java", "openjdk8", "openjdk11", "maven", "gradle", "pipenv",
         "virtualenv", "ruby-dev", "perl-dev", "go", "rust"
     ]
+
+    user_input = input("Varsayılan paketleri yüklemek ister misiniz? (E/h): ").strip().lower()
+    if user_input == 'e':
+        packages = default_packages
+    else:
+        packages = input("Yüklemek istediğiniz paketleri virgülle ayırarak girin: ").strip().split(',')
+
+    print("\nGereken paketler yükleniyor...")
     for package in packages:
+        package = package.strip()
         install_package(package)
-    print("Gereken Paketler Yüklendi!")
+    print("Gereken paketler yüklendi!")
 
 if __name__ == "__main__":
     main()
