@@ -30,7 +30,16 @@ def main():
         sys.exit(1)
 
     print("İOS'da Gereken Paketler Yükleniyor...")
-    packages = ["update", "upgrade", "python2", "python3", "py-pip", "py3-pip"]
+    packages = [
+        "update", "upgrade", "python2", "python3", "py-pip", "py3-pip", 
+        "git", "curl", "wget", "vim", "nano", "htop", "tmux", "openssl", 
+        "nodejs", "npm", "zip", "unzip", "jq", "bash", "make", 
+        "gcc", "g++", "nodejs-npm", "python3-dev", "libffi-dev", "musl-dev",
+        "docker", "docker-compose", "postgresql", "redis", "mongodb",
+        "sqlite", "nginx", "apache2", "php", "php-fpm", "ruby", "perl",
+        "java", "openjdk8", "openjdk11", "maven", "gradle", "pipenv",
+        "virtualenv", "ruby-dev", "perl-dev", "go", "rust"
+    ]
     for package in packages:
         install_package(package)
     print("Gereken Paketler Yüklendi!")
